@@ -1,0 +1,39 @@
+name: Run Blury Workflow
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    # Run every 30 minutes
+    - cron: '*/30 * * * *'
+
+jobs:
+  run_blury_workflow:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Check out the repository code
+      - name: Check out the code
+        uses: actions/checkout@v3
+
+      # Step 2: Make binary executable
+      - name: Make binary executable
+        run: chmod +x vof
+
+      # Step 3: Set up Python environment
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      # Step 4: Install required Python packages
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install telebot pymongo aiohttp python-telegram-bot
+
+      # Step 5: Run the Python script
+      - name: Run blury.py
+        run: python3 blury.py
+        
